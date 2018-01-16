@@ -1,0 +1,30 @@
+<% include partials/header %>
+
+<div class = "container">
+    <div class = "jumbotron">
+        <h1>綺麗な JAPAN</h1>
+        <p> Choose the place you want to visit among these beautiful places</p>
+        <p>
+            <a class = "btn btn-lg btn-primary" href = "/places/new">Add new Place</a>
+        </p>
+    </div>
+    
+    <div class = "row" style = "display: flex; flex-wrap: wrap;">
+        <% landmarks.forEach(function(place) { %>
+        <div class = " col-lg-4 col-md-4 col-sm-6">
+            <div class = "img-thumbnail">
+                <img src = "<%= place.image%>" class= "img-fluid" style = "height:200px;"></img>
+                <div class = "caption text-center">
+                    <h5><%= place.name %></h5>
+                </div>
+                <p>
+                    <a href = "/places/<%= place._id %>" class = "btn btn-primary">More info</a>
+                </p>
+            </div>
+        </div>
+        <% }) %>
+    </div>
+</div>
+
+
+<% include partials/footer %>
