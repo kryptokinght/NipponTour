@@ -1,4 +1,4 @@
-var express = require("express"),
+const express = require("express"),
     app = express(),
     bodyParser = require("body-parser"),
     mongoose = require("mongoose");
@@ -7,13 +7,7 @@ var express = require("express"),
 mongoose.connect("mongodb://localhost/nippon_journey", { useMongoClient: true });
 mongoose.Promise = global.Promise;
 
-var nipponSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    desc: String
-});
-
-var Tourplaces = mongoose.model("Tourplaces",nipponSchema); // we created a model named Tourplaces
+const Tourplaces = require('./models/tourplaces');
 
 /*Tourplaces.create({"name" : "Golden Pavilion", "image": "http://cdn.touropia.com/gfx/d/famous-temples/golden_pavilion.jpg?v=9ab0d0d9d29b808ee01a6e488a89500e",
                     "desc" : "This is a palace build during the 1900s by the royal emperors of Japan in favour to Buddha."}
@@ -29,7 +23,8 @@ app.set("view engine","ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get("/", function(req, res) {
-   res.render("LandingPage"); 
+    console.log("Landing page called!!");    
+    res.render("LandingPage"); 
 });
 app.get("/places",function(req, res) {
     //get all tourplaces from database
@@ -74,4 +69,5 @@ app.get("/places/:id", function(req, res) {
 });
 app.listen(process.env.PORT, process.env.IP, function() {
     console.log("The Nippon server has started!");
+   // console.log(process.env.IP);
 });
