@@ -61,11 +61,12 @@ app.post("/places", function(req, res) {
 //SHOW - shows more info about the tour place
 app.get("/places/:id", function(req, res) {
    //get the description of the place with the id
-   Tourplaces.findById(req.params.id, function(err, foundPlace) {
+   Tourplaces.findById(req.params.id).populate('comments').exec((err, foundPlace) => {
       if(err) console.log("Error in show description!");
       else {
         //render the show page for the place
         res.render("show",{place:foundPlace});       
+        console.log(foundPlace);
       }
    });
    
