@@ -8,6 +8,9 @@ mongoose.connect("mongodb://localhost/nippon_journey", { useMongoClient: true })
 mongoose.Promise = global.Promise;
 
 const Tourplaces = require('./models/tourplaces');
+const Comment = require('./models/comment');
+const seedDB = require('./seeds');
+seedDB(); //seed the database with initial data
 
 /*Tourplaces.create({"name" : "Golden Pavilion", "image": "http://cdn.touropia.com/gfx/d/famous-temples/golden_pavilion.jpg?v=9ab0d0d9d29b808ee01a6e488a89500e",
                     "desc" : "This is a palace build during the 1900s by the royal emperors of Japan in favour to Buddha."}
