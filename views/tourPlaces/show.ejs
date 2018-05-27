@@ -12,14 +12,13 @@
         <div class="col-md-9">
             <div class="thumbnail card">
                 <img class="img-responsive" src = "<%= place.image %>" alt = "An image of a campground">
-                <hr>
                 <div class="caption-full">
                     <h4 class="float-right">9.00$/night</h4>
                     <h4><a><%= place.name%></a></h4>
                     <p><%= place.desc%></p>
                 </div>
             </div>
-            <div class="bg-faded card">
+            <div class="bg-faded card comment-card">
                 <p>
                     <a class="btn btn-success" href="/places/<%=place._id%>/comments/new">Add Comment</a>
                 </p>

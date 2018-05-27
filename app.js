@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require("express"),
     app = express(),
     bodyParser = require("body-parser"),
@@ -24,6 +25,7 @@ seedDB(); //seed the database with initial data
 */
 app.set("view engine","ejs");
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get("/", (req, res) =>{
     console.log("Landing page called!!");    
