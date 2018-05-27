@@ -1,10 +1,15 @@
-<% include partials/header %>
+<% include ../partials/header %>
 <h1><%= place.name%></h1>
 <img src = "<%= place.image %>" alt = "An image of a campground">
 <p><%= place.desc%></p>
+
+<p>
+    <a class="btn btn-success" href="/places/<%=place._id%>/comments/new">Add Comment</a>
+</p>
+
 <% place.comments.forEach((comment) => { %>
     <p>
         <strong><%= comment.author%></strong> - <%= comment.text %>
     </p>
 <% }) %>
-<% include partials/footer %>
+<% include ../partials/footer %>
