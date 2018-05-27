@@ -1,15 +1,47 @@
 <% include ../partials/header %>
-<h1><%= place.name%></h1>
-<img src = "<%= place.image %>" alt = "An image of a campground">
-<p><%= place.desc%></p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 card">
+            <p class="lead">NipponTour</p>
+            <div class="list-group">
+                <div class="list-group-item active">Item 1</div>
+                <div class="list-group-item">Item 2</div>
+                <div class="list-group-item">Item 3</div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="thumbnail card">
+                <img class="img-responsive" src = "<%= place.image %>" alt = "An image of a campground">
+                <hr>
+                <div class="caption-full">
+                    <h4 class="float-right">9.00$/night</h4>
+                    <h4><a><%= place.name%></a></h4>
+                    <p><%= place.desc%></p>
+                </div>
+            </div>
+            <div class="bg-faded card">
+                <p>
+                    <a class="btn btn-success" href="/places/<%=place._id%>/comments/new">Add Comment</a>
+                </p>
+                <% place.comments.forEach((comment) => { %>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <strong><%= comment.author%></strong>
+                            <span class="float-right">10 days</span>
+                            <p><%=comment.text%></p>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+</div>
 
-<p>
-    <a class="btn btn-success" href="/places/<%=place._id%>/comments/new">Add Comment</a>
-</p>
 
-<% place.comments.forEach((comment) => { %>
-    <p>
-        <strong><%= comment.author%></strong> - <%= comment.text %>
-    </p>
-<% }) %>
+
+
+
+
+
+
 <% include ../partials/footer %>
