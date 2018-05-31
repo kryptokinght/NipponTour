@@ -140,6 +140,13 @@ app.get('/logout', (req, res) => {
 })
 
 
+//custom middleware
+function isLoggedIn(req, res, next) {
+    if(req.isAuthenticated())
+        return next();
+    res.redirect('/login');
+}
+
 app.listen(process.env.PORT, process.env.IP, function() {
     console.log("The Nippon server has started!");
    // console.log(process.env.IP);
