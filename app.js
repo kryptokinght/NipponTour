@@ -123,6 +123,23 @@ app.post('/register', (req, res) => {
    });
 });
 
+//----LOGIN ROUTES------
+//show login form
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+//handle login logic
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/places',
+    failureRedirect: '/login'
+}), (req, res) => {});
+
+app.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/');
+})
+
+
 app.listen(process.env.PORT, process.env.IP, function() {
     console.log("The Nippon server has started!");
    // console.log(process.env.IP);
