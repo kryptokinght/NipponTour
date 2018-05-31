@@ -25,6 +25,10 @@ router.post('/', (req, res) => {
           Comment.create(req.body.comment, (err, comment) => {
              if(err) console.log(err);
              else {
+                 comment.author.id = req.user._id;
+                 comment.author.username = req.user.username;
+                 //save modified comment
+                 comment.save();
                 foundPlace.comments.push(comment);
                 foundPlace.save();
                 res.redirect('/places/'+req.params.id);

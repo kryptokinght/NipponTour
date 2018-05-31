@@ -17,7 +17,7 @@ const placesRouter = require("./routes/placesRoutes"),
 mongoose.connect("mongodb://localhost/nippon_journey", { useMongoClient: true });
 mongoose.Promise = global.Promise;
 
-seedDB(); //seed the database with initial data
+//seedDB(); //seed the database with initial data
 
 app.set("view engine","ejs");
 app.use(bodyParser.urlencoded({extended: true}));

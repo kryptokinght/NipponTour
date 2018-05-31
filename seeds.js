@@ -29,7 +29,7 @@ function seedDB() {
            Tourplaces.create(seed, (err, tourplace) => {
                 if(err)
                     console.log(err);
-                else
+                else {
                     console.log("Added a tourplace");
                     //create a comment for each tourplace
                     Comment.create({
@@ -44,6 +44,7 @@ function seedDB() {
                             console.log("Comment Added");
                         }
                     });
+                }
            });
         });
     });
