@@ -19,6 +19,7 @@ app.set("view engine","ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 //----PASSPORT CONFIGURATION--------------
 app.use(require('express-session')({
     secret: "I am a glutton",
@@ -31,6 +32,11 @@ app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+app.use(function(req, res, next) { //custom middleware to send currentUser data
+    res.locals.currentUser = req.user;
+    next();
+})
 
 //----ROUTES--------
 app.get("/", (req, res) =>{

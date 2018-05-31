@@ -26,12 +26,22 @@
               </li>
             </ul>
             <ul class="navbar-nav navbar-right">
-              <li class = "nav-item"><a class = "nav-link" href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-              <li class = "nav-item"><a class = "nav-link" href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-              <li class = "nav-item"><a class = "nav-link" href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+              <% if (!currentUser) { %>
+                <li class = "nav-item"><a class = "nav-link" href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li class = "nav-item"><a class = "nav-link" href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+              <% } else { %>
+                <li class = "nav-item"><a class = "nav-link" href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                <li class = "nav-item">
+                  <a class = "nav-link" href="#">
+                    Signed in as <%= currentUser.username %>
+                  </a>
+                </li>
+              <% } %>        
             </ul>
           </div>
         </nav>
+        
+        <h3>ASS:<%= currentUser %></h3>
         
         <!-- Content for different pages goes here -->
  
