@@ -2,31 +2,37 @@ const path = require('path');
 const express = require("express"),
     app = express(),
     bodyParser = require("body-parser"),
-    mongoose = require("mongoose");
-    
+    mongoose = require("mongoose"),
+    passport = require('passport'),
+    LocalStrategy = require("passport-local"),
+    Tourplaces = require('./models/tourplaces'),
+    Comment = require('./models/comment'),
+    User = require('./models/user'),
+    seedDB = require('./seeds');    
     
 mongoose.connect("mongodb://localhost/nippon_journey", { useMongoClient: true });
 mongoose.Promise = global.Promise;
 
-const Tourplaces = require('./models/tourplaces');
-const Comment = require('./models/comment');
-const seedDB = require('./seeds');
 seedDB(); //seed the database with initial data
 
-/*Tourplaces.create({"name" : "Golden Pavilion", "image": "http://cdn.touropia.com/gfx/d/famous-temples/golden_pavilion.jpg?v=9ab0d0d9d29b808ee01a6e488a89500e",
-                    "desc" : "This is a palace build during the 1900s by the royal emperors of Japan in favour to Buddha."}
-                   , function(err, place) {
-        if(err) console.log("Error");
-        else {
-            console.log("Saved: ");
-            console.log(place);
-        }
-    });
-*/
 app.set("view engine","ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
+//----PASSPORT CONFIGURATION--------------
+app.use(require('express-session')({
+    secret: "I am a glutton",
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.authenticate());
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+//----ROUTES--------
 app.get("/", (req, res) =>{
     console.log("Landing page called!!");    
     res.render("LandingPage"); 
