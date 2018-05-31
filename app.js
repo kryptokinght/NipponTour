@@ -26,7 +26,7 @@ app.use(require('express-session')({
     saveUninitialized: false
 }));
 app.use(passport.initialize());
-app.use(passport.authenticate());
+app.use(passport.session());
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
@@ -102,6 +102,24 @@ app.post('/places/:id/comments', (req, res) => {
              }
           });
       }
+   });
+});
+
+//----AUTH ROUTES---------
+app.get('/register', (req, res) => {
+    res.render('register');
+});
+
+app.post('/register', (req, res) => {
+   let newUser = new User({username: req.body.username});
+   User.register(newUser, req.body.password, (err, user) => {
+       if(err) {
+           console.log(err);
+           return res.redirect('/register');
+       }
+       passport.authenticate('local')(req, res, function() {
+           res.redirect('/places');
+       })
    });
 });
 
