@@ -10,6 +10,10 @@ const express = require("express"),
     User = require('./models/user'),
     seedDB = require('./seeds');    
     
+const placesRouter = require("./routes/placesRoutes"), 
+    commentRouter = require("./routes/commentRoutes"),
+    indexRouter = require("./routes/indexRoutes");
+    
 mongoose.connect("mongodb://localhost/nippon_journey", { useMongoClient: true });
 mongoose.Promise = global.Promise;
 
@@ -33,125 +37,15 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use(function(req, res, next) { //custom middleware to send currentUser data
+//middleware to send currentUser data
+app.use(function(req, res, next) { 
     res.locals.currentUser = req.user;
     next();
 })
 
-//----ROUTES--------
-app.get("/", (req, res) =>{
-    console.log("Landing page called!!");    
-    res.render("LandingPage"); 
-});
-app.get("/places",(req, res) =>{
-    //get all tourplaces from database
-    Tourplaces.find({}, (err, landmarks) =>{
-        if(err) console.log("EROROROR!");
-        else {
-            res.render("tourPlaces/index",{landmarks:landmarks});      
-        }
-    });
-});
-app.get("/places/new", (req, res) =>{
-   res.render("tourPlaces/new"); 
-});
-
-app.post("/places", (req, res) =>{
-    var newPlace = req.body.place;
-    //create a new tourplace and save to databse
-    Tourplaces.create(newPlace, (err, place) =>{
-       if (err) console.log("Eror");
-       else {
-           console.log("Saved!");
-           console.log(place);
-           res.redirect("/places");
-       }
-    });
-});
-
-//SHOW - shows more info about the tour place
-app.get("/places/:id", (req, res) =>{
-   //get the description of the place with the id
-   Tourplaces.findById(req.params.id).populate('comments').exec((err, foundPlace) => {
-      if(err) console.log("Error in show description!");
-      else {
-        //render the show page for the place
-        res.render("tourPlaces/show",{place:foundPlace});       
-        console.log(foundPlace);
-      }
-   });
-   
-});
-
-//COMMENTS routes
-app.get('/places/:id/comments/new', isLoggedIn, (req, res) => {
-    Tourplaces.findById(req.params.id, (err, foundPlace) => {
-       if(err) console.log(err);
-       else {
-           res.render('comments/new', {place: foundPlace});
-       }
-    });
-});
-app.post('/places/:id/comments', (req, res) => {
-   Tourplaces.findById(req.params.id, (err, foundPlace) => {
-      if(err){
-          console.log(err);
-          res.redirect('/places/'+req.params.id);
-      } 
-      else {
-          Comment.create(req.body.comment, (err, comment) => {
-             if(err) console.log(err);
-             else {
-                foundPlace.comments.push(comment);
-                foundPlace.save();
-                res.redirect('/places/'+req.params.id);
-             }
-          });
-      }
-   });
-});
-
-//----AUTH ROUTES---------
-app.get('/register', (req, res) => {
-    res.render('register');
-});
-
-app.post('/register', (req, res) => {
-   let newUser = new User({username: req.body.username});
-   User.register(newUser, req.body.password, (err, user) => {
-       if(err) {
-           console.log(err);
-           return res.redirect('/register');
-       }
-       passport.authenticate('local')(req, res, function() {
-           res.redirect('/places');
-       })
-   });
-});
-
-//----LOGIN ROUTES------
-//show login form
-app.get('/login', (req, res) => {
-    res.render('login');
-});
-//handle login logic
-app.post('/login', passport.authenticate('local', {
-    successRedirect: '/places',
-    failureRedirect: '/login'
-}), (req, res) => {});
-
-app.get('/logout', (req, res) => {
-    req.logout();
-    res.redirect('/');
-})
-
-
-//custom middleware
-function isLoggedIn(req, res, next) {
-    if(req.isAuthenticated())
-        return next();
-    res.redirect('/login');
-}
+app.use("/", indexRouter);
+app.use("/places", placesRouter);
+app.use("/places/:id/comments", commentRouter);
 
 app.listen(process.env.PORT, process.env.IP, function() {
     console.log("The Nippon server has started!");
