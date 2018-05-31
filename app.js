@@ -78,7 +78,7 @@ app.get("/places/:id", (req, res) =>{
 });
 
 //COMMENTS routes
-app.get('/places/:id/comments/new', (req, res) => {
+app.get('/places/:id/comments/new', isLoggedIn, (req, res) => {
     Tourplaces.findById(req.params.id, (err, foundPlace) => {
        if(err) console.log(err);
        else {
