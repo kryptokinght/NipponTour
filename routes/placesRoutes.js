@@ -15,13 +15,18 @@ router.get("/",(req, res) =>{
 });
 
 //new tourPlace
-router.get("/new", (req, res) =>{
+router.get("/new", isLoggedIn, (req, res) =>{
    res.render("tourPlaces/new"); 
 });
 
 //create tourPlace
-router.post("/", (req, res) =>{
+router.post("/", isLoggedIn, (req, res) =>{
     var newPlace = req.body.place;
+    var author = {
+        id: req.user._id,
+        username: req.user.username
+    };
+    newPlace.author = author;
     //create a new tourplace and save to databse
     Tourplaces.create(newPlace, (err, place) =>{
        if (err) console.log("Eror");
@@ -46,5 +51,12 @@ router.get("/:id", (req, res) =>{
    });
    
 });
+
+//middleware
+function isLoggedIn(req, res, next) {
+    if(req.isAuthenticated())
+        return next();
+    res.redirect('/login');
+}
 
 module.exports = router;
