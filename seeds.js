@@ -21,11 +21,11 @@ const data = [
 ];
 
 function seedDB() {
-    Tourplaces.remove({}, (err) => {
+    Tourplaces.remove({}, (err) => {  //clearing up our database off previous data
         if(err)
             console.log(err);
         console.log("All Tourplaces removed");
-        data.forEach((seed) => {
+        data.forEach((seed) => {  //initializing database with seeded data stored in 'data' array
            Tourplaces.create(seed, (err, tourplace) => {
                 if(err)
                     console.log(err);
