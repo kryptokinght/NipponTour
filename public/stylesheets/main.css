@@ -13,3 +13,7 @@
 .comment-card {
     padding: 9px;
 }
+
+#delete-form {
+    display: inline-block;
+}

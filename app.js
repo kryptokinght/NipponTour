@@ -2,6 +2,7 @@ const path = require('path');
 const express = require("express"),
     app = express(),
     bodyParser = require("body-parser"),
+    methodOverride = require("method-override"),
     mongoose = require("mongoose"),
     passport = require('passport'),
     LocalStrategy = require("passport-local"),
@@ -22,6 +23,7 @@ mongoose.Promise = global.Promise;
 app.set("view engine","ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(methodOverride("_method"));
 
 
 //----PASSPORT CONFIGURATION--------------

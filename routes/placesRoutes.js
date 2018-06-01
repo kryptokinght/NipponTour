@@ -49,8 +49,40 @@ router.get("/:id", (req, res) =>{
         console.log(foundPlace);
       }
    });
-   
 });
+
+//EDIT - edit tourplace
+router.get("/:id/edit", (req, res) => {
+    Tourplaces.findById(req.params.id, (err, foundPlace) => {
+        if(err) {
+            console.log(err);
+            res.redirect('/places');
+        } else {
+            res.render("tourPlaces/edit", {place: foundPlace});         
+        }
+    })
+});
+
+//UPDATE tourplace
+router.put('/:id', (req, res) => {
+    Tourplaces.findByIdAndUpdate(req.params.id, req.body.place, (err, updatedPlace) => {
+        if(err)
+            res.redirect("/places/" + req.params.id);
+        else {
+            res.redirect("/places/" + req.params.id);
+        }
+    });
+});
+
+//delete campground
+router.delete('/:id', (req, res) => {
+   Tourplaces.findByIdAndRemove(req.params.id, (err, deletedPlace) => {
+       if(err)
+        res.redirect("/places" + req.params.id);
+       res.redirect("/places");
+   }); 
+});
+
 
 //middleware
 function isLoggedIn(req, res, next) {

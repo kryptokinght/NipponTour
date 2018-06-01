@@ -1,0 +1,22 @@
+<% include ../partials/header %>
+<div class= "container" >
+    <h1 class= "text-center" style= "margin-bottom:20px">
+        Update <%= place.name %>
+    </h1>
+    <form action = "/places/<%= place._id%>?_method=PUT" method = "POST">
+        <div class= "form-group">
+            <input class= "form-control " type = "text" name = "place[name]" value="<%= place.name %>" style = "width:30%; margin: 0 auto;">
+        </div>
+        <div class= "form-group">
+            <input class= "form-control" type = "text" name = "place[image]" value="<%= place.image %>" style = "width:30%; margin: 0 auto;">
+        </div>
+        <div class = "form-group">
+            <input class = "form-control" type = "text" name = "place[desc]" value="<%= place.desc %>" style = "width:30%; margin:0 auto;">
+        </div>
+        <div class= "form-group">
+            <button class="btn btn-primary btn-block" style= "margin:0 auto; width: 30%">Submit</button>
+        </div>
+        <a href= "/places" style= "margin:0 auto">Go Back</a>
+    </form>
+</div>
+<% include ../partials/footer %>
