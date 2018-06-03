@@ -52,15 +52,12 @@ router.get("/:id", (req, res) =>{
 });
 
 //EDIT - edit tourplace
-router.get("/:id/edit", (req, res) => {
-    Tourplaces.findById(req.params.id, (err, foundPlace) => {
-        if(err) {
-            console.log(err);
-            res.redirect('/places');
-        } else {
-            res.render("tourPlaces/edit", {place: foundPlace});         
-        }
-    })
+router.get("/:id/edit", checkPlaceOwnership, (req, res, foundPlace) => {
+    Tourplaces.findById(req.params.id, (err, foundPlace)=> {
+        res.render("tourPlaces/edit", {place: foundPlace});    
+    });
+    
+    
 });
 
 //UPDATE tourplace
@@ -89,6 +86,29 @@ function isLoggedIn(req, res, next) {
     if(req.isAuthenticated())
         return next();
     res.redirect('/login');
+}
+
+function checkPlaceOwnership(req, res, next) {
+    if(req.isAuthenticated()) {
+        Tourplaces.findById(req.params.id, (err, foundPlace) => {
+            if(err) {
+                console.log(err);
+                res.redirect("back");
+            } else {
+                //does user own the campground
+                if(req.user._id.equals(foundPlace.author.id)) {
+                    next();    
+                }
+                else {
+                    res.redirect("back");
+                }
+                         
+            }
+        });    
+    }
+    else {
+        res.redirect("back");
+    }
 }
 
 module.exports = router;
