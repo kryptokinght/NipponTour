@@ -20,7 +20,7 @@ router.post('/', (req, res) => {
       if(err){
           console.log(err);
           res.redirect('/places/'+req.params.id);
-      } 
+      }
       else {
           Comment.create(req.body.comment, (err, comment) => {
              if(err) console.log(err);
@@ -38,11 +38,64 @@ router.post('/', (req, res) => {
    });
 });
 
+
+//EDIT - edit comment
+router.get("/:id/edit", checkPlaceOwnership, (req, res, foundPlace) => {
+    Tourplaces.findById(req.params.id, (err, foundPlace)=> {
+        res.render("tourPlaces/edit", {place: foundPlace});
+    });
+
+
+});
+
+//UPDATE comment
+router.put('/:id', (req, res) => {
+    Tourplaces.findByIdAndUpdate(req.params.id, req.body.place, (err, updatedPlace) => {
+        if(err)
+            res.redirect("/places/" + req.params.id);
+        else {
+            res.redirect("/places/" + req.params.id);
+        }
+    });
+});
+
+//delete comment
+router.delete('/:id', (req, res) => {
+   Tourplaces.findByIdAndRemove(req.params.id, (err, deletedPlace) => {
+       if(err)
+        res.redirect("/places" + req.params.id);
+       res.redirect("/places");
+   });
+});
+
 //middleware
 function isLoggedIn(req, res, next) {
     if(req.isAuthenticated())
         return next();
     res.redirect('/login');
+}
+
+function checkCommentOwnership(req, res, next) {
+    if(req.isAuthenticated()) {
+        Tourplaces.findById(req.params.id, (err, foundPlace) => {
+            if(err) {
+                console.log(err);
+                res.redirect("back");
+            } else {
+                //does user own the campground
+                if(req.user._id.equals(foundPlace.author.id)) {
+                    next();
+                }
+                else {
+                    res.redirect("back");
+                }
+
+            }
+        });
+    }
+    else {
+        res.redirect("back");
+    }
 }
 
 module.exports = router;
