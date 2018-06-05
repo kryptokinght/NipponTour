@@ -19,10 +19,12 @@
                     <p>
                         <em>Submited by <%= place.author.username %></em>
                     </p>
-                    <a class="btn btn-warning" href="/places/<%= place._id %>/edit">Edit</a>
-                    <form id="delete-form" action="/places/<%=place._id%>?_method=DELETE" method="POST">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
+                    <% if(currentUser && place.author.id.equals(currentUser._id)) { %>
+                        <a class="btn btn-warning" href="/places/<%= place._id %>/edit">Edit</a>
+                        <form id="delete-form" action="/places/<%=place._id%>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    <% } %>
                 </div>
             </div>
             <div class="bg-faded card comment-card">
@@ -36,6 +38,12 @@
                             <span class="float-right">10 days</span>
                             <p><%=comment.text%></p>
                         </div>
+                        <% if(currentUser && place.author.id.equals(currentUser._id)) { %>
+                            <a class="btn btn-warning" href="/places/<%= place._id %>/edit">Edit</a>
+                            <form id="delete-form" action="/places/<%=place._id%>?_method=DELETE" method="POST">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        <% } %>
                     </div>
                 <% }) %>
             </div>
