@@ -56,7 +56,7 @@ router.get("/:comment_id/edit", (req, res, foundPlace) => {
 
 //UPDATE comment
 router.put('/:comment_id', (req, res) => {
-    Tourplaces.findByIdAndUpdate(req.params.id, req.body.place, (err, updatedPlace) => {
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err, updatedComment) => {
         if(err)
             res.redirect("/places/" + req.params.id);
         else {
