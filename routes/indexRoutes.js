@@ -6,8 +6,8 @@ var router = express.Router();
 
 //root
 router.get("/", (req, res) =>{
-    console.log("Landing page called!!");    
-    res.render("LandingPage"); 
+    console.log("Landing page called!!");
+    res.render("LandingPage");
 });
 
 //new user
@@ -31,7 +31,7 @@ router.post('/register', (req, res) => {
 
 //show login form
 router.get('/login', (req, res) => {
-    res.render('login');
+    res.render('login', {message: req.flash("error")});
 });
 
 //handle login logic
