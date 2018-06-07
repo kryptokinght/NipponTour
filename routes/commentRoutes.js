@@ -44,7 +44,7 @@ router.post('/', isLoggedIn, (req, res) => {
 
 
 //EDIT - edit comment
-router.get("/:comment_id/edit", (req, res, foundPlace) => {
+router.get("/:comment_id/edit", checkCommentOwnership, (req, res, foundPlace) => {
   Comment.findById(req.params.comment_id, (err, foundComment) => {
     if(err)
       res.redirect("back");
@@ -55,7 +55,7 @@ router.get("/:comment_id/edit", (req, res, foundPlace) => {
 });
 
 //UPDATE comment
-router.put('/:comment_id', (req, res) => {
+router.put('/:comment_id', checkCommentOwnership, (req, res) => {
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err, updatedComment) => {
         if(err)
             res.redirect("/places/" + req.params.id);
@@ -66,8 +66,8 @@ router.put('/:comment_id', (req, res) => {
 });
 
 //delete comment
-router.delete('/:id', (req, res) => {
-   Tourplaces.findByIdAndRemove(req.params.id, (err, deletedPlace) => {
+router.delete('/:comment_id', checkCommentOwnership, (req, res) => {
+   Comment.findByIdAndRemove(req.params.comment_id, (err, deletedComment) => {
        if(err)
         res.redirect("/places" + req.params.id);
        res.redirect("/places");
@@ -83,13 +83,13 @@ function isLoggedIn(req, res, next) {
 
 function checkCommentOwnership(req, res, next) {
     if(req.isAuthenticated()) {
-        Tourplaces.findById(req.params.id, (err, foundPlace) => {
+        Comment.findById(req.params.comment_id, (err, foundComment) => {
             if(err) {
                 console.log(err);
                 res.redirect("back");
             } else {
                 //does user own the campground
-                if(req.user._id.equals(foundPlace.author.id)) {
+                if(req.user._id.equals(foundComment.author.id)) {
                     next();
                 }
                 else {
