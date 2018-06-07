@@ -1,11 +1,12 @@
 const express = require("express"),
     Comment = require('../models/comment'),
-    Tourplaces = require("../models/tourplaces");
+    Tourplaces = require("../models/tourplaces"),
+    middleware = require("../middleware");
 
 var router = express.Router({mergeParams: true});
 
 //new comment
-router.get('/new', isLoggedIn, (req, res) => {
+router.get('/new', middleware.isLoggedIn, (req, res) => {
     Tourplaces.findById(req.params.id, (err, foundPlace) => {
        if(err) console.log(err);
        else {
@@ -15,7 +16,7 @@ router.get('/new', isLoggedIn, (req, res) => {
 });
 
 //create comment
-router.post('/', isLoggedIn, (req, res) => {
+router.post('/', middleware.isLoggedIn, (req, res) => {
   console.log("Comment post route called!!");
    Tourplaces.findById(req.params.id, (err, foundPlace) => {
       if(err){
@@ -44,7 +45,7 @@ router.post('/', isLoggedIn, (req, res) => {
 
 
 //EDIT - edit comment
-router.get("/:comment_id/edit", checkCommentOwnership, (req, res, foundPlace) => {
+router.get("/:comment_id/edit", middleware.checkCommentOwnership, (req, res, foundPlace) => {
   Comment.findById(req.params.comment_id, (err, foundComment) => {
     if(err)
       res.redirect("back");
@@ -55,7 +56,7 @@ router.get("/:comment_id/edit", checkCommentOwnership, (req, res, foundPlace) =>
 });
 
 //UPDATE comment
-router.put('/:comment_id', checkCommentOwnership, (req, res) => {
+router.put('/:comment_id', middleware.checkCommentOwnership, (req, res) => {
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err, updatedComment) => {
         if(err)
             res.redirect("/places/" + req.params.id);
@@ -66,41 +67,12 @@ router.put('/:comment_id', checkCommentOwnership, (req, res) => {
 });
 
 //delete comment
-router.delete('/:comment_id', checkCommentOwnership, (req, res) => {
+router.delete('/:comment_id', middleware.checkCommentOwnership, (req, res) => {
    Comment.findByIdAndRemove(req.params.comment_id, (err, deletedComment) => {
        if(err)
-        res.redirect("/places" + req.params.id);
-       res.redirect("/places" + req.params.id);
+        res.redirect("/places/" + req.params.id);
+       res.redirect("/places/" + req.params.id);
    });
 });
-
-//middleware
-function isLoggedIn(req, res, next) {
-    if(req.isAuthenticated())
-        return next();
-    res.redirect('/login');
-}
-
-function checkCommentOwnership(req, res, next) {
-    if(req.isAuthenticated()) {
-        Comment.findById(req.params.comment_id, (err, foundComment) => {
-            if(err) {
-                console.log(err);
-                res.redirect("back");
-            } else {
-                //does user own the campground
-                if(req.user._id.equals(foundComment.author.id)) {
-                    next();
-                }
-                else {
-                    res.redirect("back");
-                }
-            }
-        });
-    }
-    else {
-        res.redirect("back");
-    }
-}
 
 module.exports = router;
