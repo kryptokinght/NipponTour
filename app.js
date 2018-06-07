@@ -49,7 +49,7 @@ app.use("/", indexRouter);
 app.use("/places", placesRouter);
 app.use("/places/:id/comments", commentRouter);
 
-app.listen(process.env.PORT, process.env.IP, function() {
-    console.log("The Nippon server has started on " + process.env.PORT);
+app.listen(8000, function() {
+    console.log("The Nippon server has started on " + 8000);
    // console.log(process.env.IP);
 });

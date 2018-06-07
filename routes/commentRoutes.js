@@ -15,7 +15,8 @@ router.get('/new', isLoggedIn, (req, res) => {
 });
 
 //create comment
-router.post('/', (req, res) => {
+router.post('/', isLoggedIn, (req, res) => {
+  console.log("Comment post route called!!");
    Tourplaces.findById(req.params.id, (err, foundPlace) => {
       if(err){
           console.log(err);
@@ -30,7 +31,10 @@ router.post('/', (req, res) => {
                  //save modified comment
                  comment.save();
                 foundPlace.comments.push(comment);
-                foundPlace.save();
+                foundPlace.save((savedPlace) => {
+                  console.log("PLACE saved with comment");
+                  console.log(savedPlace);
+                });
                 res.redirect('/places/'+req.params.id);
              }
           });
@@ -40,7 +44,7 @@ router.post('/', (req, res) => {
 
 
 //EDIT - edit comment
-router.get("/:id/edit", checkPlaceOwnership, (req, res, foundPlace) => {
+router.get("/:id/edit", checkCommentOwnership, (req, res, foundPlace) => {
     Tourplaces.findById(req.params.id, (err, foundPlace)=> {
         res.render("tourPlaces/edit", {place: foundPlace});
     });

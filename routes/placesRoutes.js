@@ -61,7 +61,7 @@ router.get("/:id/edit", checkPlaceOwnership, (req, res, foundPlace) => {
 });
 
 //UPDATE tourplace
-router.put('/:id', (req, res) => {
+router.put('/:id', checkPlaceOwnership, (req, res) => {
     Tourplaces.findByIdAndUpdate(req.params.id, req.body.place, (err, updatedPlace) => {
         if(err)
             res.redirect("/places/" + req.params.id);
@@ -72,7 +72,7 @@ router.put('/:id', (req, res) => {
 });
 
 //delete campground
-router.delete('/:id', (req, res) => {
+router.delete('/:id', checkPlaceOwnership, (req, res) => {
    Tourplaces.findByIdAndRemove(req.params.id, (err, deletedPlace) => {
        if(err)
         res.redirect("/places" + req.params.id);

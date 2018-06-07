@@ -17,7 +17,7 @@ var tourplaceSchema = new mongoose.Schema({
             ref: "Comment"
         }
     ]
-});
+}, { usePushEach: true });
 
 var Tourplaces = mongoose.model("Tourplaces",tourplaceSchema); // we created a model named Tourplaces
 module.exports = Tourplaces;
