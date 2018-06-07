@@ -44,16 +44,18 @@ router.post('/', isLoggedIn, (req, res) => {
 
 
 //EDIT - edit comment
-router.get("/:id/edit", checkCommentOwnership, (req, res, foundPlace) => {
-    Tourplaces.findById(req.params.id, (err, foundPlace)=> {
-        res.render("tourPlaces/edit", {place: foundPlace});
-    });
-
-
+router.get("/:comment_id/edit", (req, res, foundPlace) => {
+  Comment.findById(req.params.comment_id, (err, foundComment) => {
+    if(err)
+      res.redirect("back");
+    else {
+      res.render("comments/edit", {place_id : req.params.id, comment: foundComment});
+    }
+  });
 });
 
 //UPDATE comment
-router.put('/:id', (req, res) => {
+router.put('/:comment_id', (req, res) => {
     Tourplaces.findByIdAndUpdate(req.params.id, req.body.place, (err, updatedPlace) => {
         if(err)
             res.redirect("/places/" + req.params.id);
