@@ -70,7 +70,7 @@ router.delete('/:comment_id', checkCommentOwnership, (req, res) => {
    Comment.findByIdAndRemove(req.params.comment_id, (err, deletedComment) => {
        if(err)
         res.redirect("/places" + req.params.id);
-       res.redirect("/places");
+       res.redirect("/places" + req.params.id);
    });
 });
 
@@ -95,7 +95,6 @@ function checkCommentOwnership(req, res, next) {
                 else {
                     res.redirect("back");
                 }
-
             }
         });
     }
