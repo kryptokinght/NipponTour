@@ -8,7 +8,9 @@ var router = express.Router();
 router.get("/",(req, res) =>{
     //get all tourplaces from database
     Tourplaces.find({}, (err, landmarks) =>{
-        if(err) console.log("EROROROR!");
+        if(err) {
+          req.flash("error", "Something went wrong with Database")
+        }
         else {
             res.render("tourPlaces/index",{landmarks:landmarks});
         }
@@ -34,6 +36,7 @@ router.post("/", middleware.isLoggedIn, (req, res) =>{
        else {
            console.log("Saved!");
            console.log(place);
+           req.flash("success", "Tourplace created");
            res.redirect("/places");
        }
     });
@@ -67,6 +70,7 @@ router.put('/:id', middleware.checkPlaceOwnership, (req, res) => {
         if(err)
             res.redirect("/places/" + req.params.id);
         else {
+          req.flash("success", "Tourplace edited")
             res.redirect("/places/" + req.params.id);
         }
     });
@@ -75,8 +79,11 @@ router.put('/:id', middleware.checkPlaceOwnership, (req, res) => {
 //delete campground
 router.delete('/:id', middleware.checkPlaceOwnership, (req, res) => {
    Tourplaces.findByIdAndRemove(req.params.id, (err, deletedPlace) => {
-       if(err)
-        res.redirect("/places/" + req.params.id);
+       if(err) {
+          req.flash("error", "Something went wrong");
+          res.redirect("/places/" + req.params.id);
+       }
+       req.flash("success", "TourPlace deleted");
        res.redirect("/places/");
    });
 });
