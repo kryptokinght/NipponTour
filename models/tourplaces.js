@@ -3,6 +3,7 @@ const Comment = require('./comment');
 var tourplaceSchema = new mongoose.Schema({
     name: String,
     image: String,
+    price: String,
     desc: String,
     author: {
         id: {
