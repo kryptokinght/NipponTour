@@ -12,7 +12,7 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <a class="navbar-brand" href="/">NipponTour</a>
-        
+
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item">
@@ -36,10 +36,21 @@
                     Signed in as <%= currentUser.username %>
                   </a>
                 </li>
-              <% } %>        
+              <% } %>
             </ul>
           </div>
         </nav>
-        
+        <div class="container">
+            <% if(error && error.length > 0) { %>
+                <div class="alert alert-danger" role="alert">
+                  <%= error %>
+                </div>
+            <% } %>
+            <% if(success && success.length > 0) { %>
+                <div class="alert alert-success" role="alert">
+                  <%= success %>
+                </div>
+            <% } %>
+        </div>
+
         <!-- Content for different pages goes here -->
- 
