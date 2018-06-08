@@ -15,10 +15,14 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
         Comment.findById(req.params.comment_id, (err, foundComment) => {
             if(err) {
                 console.log(err);
-                req.flash("error", "Something went wrong");
+                req.flash("error", "Comment not found");
                 res.redirect("back");
             } else {
                 //does user own the campground
+                if(!foundComment) {
+                    req.flash("error", "Comment does not exist anymore");
+                    res.redirect("back");
+                }
                 if(req.user._id.equals(foundComment.author.id)) {
                     next();
                 }
@@ -40,9 +44,13 @@ middlewareObj.checkPlaceOwnership = function(req, res, next) {
         Tourplaces.findById(req.params.id, (err, foundPlace) => {
             if(err) {
                 console.log(err);
-                req.flash("error", "Something went wrong");
+                req.flash("error", "Place not found");
                 res.redirect("back");
             } else {
+                if(!foundPlace) {
+                    req.flash("error", "Place does not exist anymore");
+                    res.redirect("back");
+                }
                 //does user own the campground
                 if(req.user._id.equals(foundPlace.author.id)) {
                     next();
