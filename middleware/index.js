@@ -6,7 +6,7 @@ var middlewareObj = {};
 middlewareObj.isLoggedIn = function(req, res, next) {
     if(req.isAuthenticated())
         return next();
-    req.flash("error", "Login First!");
+    req.flash("error", "You must be logged in");
     res.redirect('/login');
 }
 
@@ -15,6 +15,7 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
         Comment.findById(req.params.comment_id, (err, foundComment) => {
             if(err) {
                 console.log(err);
+                req.flash("error", "Something went wrong");
                 res.redirect("back");
             } else {
                 //does user own the campground
@@ -22,12 +23,14 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
                     next();
                 }
                 else {
+                    req.flash("error", "You don't have the authorization");
                     res.redirect("back");
                 }
             }
         });
     }
     else {
+        req.flash("error", "You must be logged in");
         res.redirect("back");
     }
 }
@@ -37,6 +40,7 @@ middlewareObj.checkPlaceOwnership = function(req, res, next) {
         Tourplaces.findById(req.params.id, (err, foundPlace) => {
             if(err) {
                 console.log(err);
+                req.flash("error", "Something went wrong");
                 res.redirect("back");
             } else {
                 //does user own the campground
@@ -44,6 +48,7 @@ middlewareObj.checkPlaceOwnership = function(req, res, next) {
                     next();
                 }
                 else {
+                    req.flash("error", "You don't have the authorization");
                     res.redirect("back");
                 }
 
@@ -51,6 +56,7 @@ middlewareObj.checkPlaceOwnership = function(req, res, next) {
         });
     }
     else {
+        req.flash("error", "You must be logged in");
         res.redirect("back");
     }
 }
