@@ -57,3 +57,5 @@ app.listen(8000, function() {
     console.log("The Nippon server has started on " + 8000);
    // console.log(process.env.IP);
 });
+
+/*********END***************/
